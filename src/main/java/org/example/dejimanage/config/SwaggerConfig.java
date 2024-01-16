@@ -23,4 +23,11 @@ public class SwaggerConfig {
                 .pathsToMatch("/energy/**")
                 .build();
     }
+    @Bean
+    public GroupedOpenApi thirdGroup() {
+        return GroupedOpenApi.builder()
+                .group("projectOrder")
+                .pathsToMatch("/project/**")
+                .build();
+    }
 }
