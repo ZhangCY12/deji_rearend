@@ -42,5 +42,14 @@ public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, Energ
         return energyTotals;
     }
 
+    @Override
+    public List<EnergyTotal> GetNowEnergy() {
+        List<EnergyTotal> energyTotals = new LambdaQueryChainWrapper<>(energyTotalMapper)
+                .last("limit 1")
+                .orderByDesc(EnergyTotal::getDate)
+                .list();
+        return energyTotals;
+    }
+
 
 }

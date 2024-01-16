@@ -30,4 +30,12 @@ public class SwaggerConfig {
                 .pathsToMatch("/project/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi fourGroup() {
+        return GroupedOpenApi.builder()
+                .group("notice")
+                .pathsToMatch("/notice/**")
+                .build();
+    }
 }

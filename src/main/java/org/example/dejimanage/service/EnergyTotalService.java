@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface EnergyTotalService extends IService<EnergyTotal> {
     public List<EnergyTotal> GetAllEnergy();
-
+    public List<EnergyTotal> GetNowEnergy();
 }

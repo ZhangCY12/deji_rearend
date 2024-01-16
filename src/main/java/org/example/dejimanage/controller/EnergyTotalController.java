@@ -28,4 +28,10 @@ public class EnergyTotalController {
         }
         return Result.ok().data("energys", energyTotals);
     }
+
+    @GetMapping("/now")
+    public Result findNowEnergy(){
+
+        return Result.ok().data("energy",energyTotalService.GetNowEnergy());
+    }
 }
