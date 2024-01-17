@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, EnergyTotal> implements EnergyTotalService {
@@ -17,29 +19,28 @@ public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, Energ
     private EnergyTotalMapper energyTotalMapper;
 
     /**
-     * 计算每天的平均温湿度，和每天的用电量计算
+     * 计算过去10天，每天的平均温湿度，和用电量
      * @return
      */
     @Override
-    public List<EnergyTotal> GetAllEnergy() {
+    public List<Map<String,String>> GetAllEnergy() {
         List<EnergyTotal> energyTotals = new LambdaQueryChainWrapper<>(energyTotalMapper)
-                .last("limit 10") // 限制返回的记录数最多为10条
+                .orderByDesc(EnergyTotal::getDate)
+                .last("limit 11") // 限制返回的记录数最多为11条
                 .list();
-        int i = 0;
-        List<String> activeEnergyTotals = new ArrayList<>();
-        for (EnergyTotal energyTotal : energyTotals) {
-            energyTotal.date = energyTotal.date.substring(energyTotal.date.length() - 2);
-            activeEnergyTotals.add(energyTotal.activeEnergyTotal);
+        List<Map<String,String>> lists = new ArrayList<>();
+        //逻辑：当天总电量减去前一天总电量为当天用电量
+        for (int i = energyTotals.size() - 2; i >=0; i--) {
+            Map<String,String> map = new HashMap<>();
+            double nowEle = Double.parseDouble(energyTotals.get(i).activeEnergyTotal);
+            double yesterdayEle = Double.parseDouble(energyTotals.get(i+1).activeEnergyTotal);
+            map.put("activeEnergyTotal",(nowEle-yesterdayEle)+"");
+            map.put("date",energyTotals.get(i).date.substring(energyTotals.get(i).date.length() - 2));
+            map.put("humidity",energyTotals.get(i).humidity);
+            map.put("temperature",energyTotals.get(i).temperature);
+            lists.add(map);
         }
-        for (EnergyTotal energyTotal : energyTotals) {
-            if (i == 0) {
-                energyTotal.activeEnergyTotal = String.valueOf(Double.valueOf(energyTotal.activeEnergyTotal) - 950).substring(0, 5);
-            } else {
-                energyTotal.activeEnergyTotal = String.valueOf(Double.valueOf(energyTotal.activeEnergyTotal) - Double.valueOf(activeEnergyTotals.get(i - 1))).substring(0, 5);
-            }
-            i++;
-        }
-        return energyTotals;
+        return lists;
     }
 
     @Override

@@ -22,11 +22,7 @@ public class EnergyTotalController {
 
     @GetMapping("/all")
     public Result findAllEnergy() {
-        List<EnergyTotal> energyTotals = energyTotalService.GetAllEnergy();
-        for (EnergyTotal energyTotal : energyTotals) {
-            energyTotal.date = energyTotal.date.substring(energyTotal.date.length() - 2);
-        }
-        return Result.ok().data("energys", energyTotals);
+        return Result.ok().data("energys", energyTotalService.GetAllEnergy());
     }
 
     @GetMapping("/now")
