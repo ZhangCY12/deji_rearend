@@ -14,6 +14,11 @@ import java.util.List;
 public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, CncStatusTime> implements CncStatusTimeService {
     @Autowired
     private CncStatusTimeMapper cncStatusTimeMapper;
+
+
+    /***
+     * 查询所有cnc机台的稼动率、运行时间、待机时间、异常时间
+     */
     @Override
     public List<CncStatusTime> GetAllCncStatusTime(){
         QueryWrapper<CncStatusTime> queryWrapper = new QueryWrapper<>();

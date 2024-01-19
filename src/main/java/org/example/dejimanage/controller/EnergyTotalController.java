@@ -1,7 +1,5 @@
 package org.example.dejimanage.controller;
 
-
-import org.example.dejimanage.entity.EnergyTotal;
 import org.example.dejimanage.service.EnergyTotalService;
 import org.example.dejimanage.tools.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/energy")
@@ -27,7 +24,6 @@ public class EnergyTotalController {
 
     @GetMapping("/now")
     public Result findNowEnergy(){
-
         return Result.ok().data("energy",energyTotalService.GetNowEnergy());
     }
 }

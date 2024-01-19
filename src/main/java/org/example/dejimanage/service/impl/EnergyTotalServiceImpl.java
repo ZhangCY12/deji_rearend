@@ -20,7 +20,6 @@ public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, Energ
 
     /**
      * 计算过去10天，每天的平均温湿度，和用电量
-     * @return
      */
     @Override
     public List<Map<String,String>> GetAllEnergy() {
@@ -43,6 +42,9 @@ public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, Energ
         return lists;
     }
 
+    /***
+     * 查询当天的能源信息
+     */
     @Override
     public List<EnergyTotal> GetNowEnergy() {
         List<EnergyTotal> energyTotals = new LambdaQueryChainWrapper<>(energyTotalMapper)

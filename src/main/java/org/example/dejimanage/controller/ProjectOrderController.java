@@ -23,4 +23,9 @@ public class ProjectOrderController {
     public Result GetNumberOfVariousTypesOfWorkOrders(){
         return Result.ok().data("orderType",projectOrderService.getOrderCounts());
     }
+
+    @GetMapping("/planPractial")
+    public Result GetNumPlanPractial(){
+        return Result.ok().data("info",projectOrderService.GetNumPlanPractial());
+    }
 }

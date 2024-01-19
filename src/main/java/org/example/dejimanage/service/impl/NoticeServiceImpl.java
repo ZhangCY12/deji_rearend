@@ -2,7 +2,6 @@ package org.example.dejimanage.service.impl;
 
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.example.dejimanage.entity.EnergyTotal;
 import org.example.dejimanage.entity.Notice;
 import org.example.dejimanage.mapper.NoticeMapper;
 import org.example.dejimanage.service.NoticeService;
@@ -19,6 +18,10 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     @Autowired
     private NoticeMapper noticeMapper;
 
+
+    /***
+     * 查询最新的一条公告
+     */
     @Override
     public Map<String, String> GetNotice() {
         List<Notice> energyTotals = new LambdaQueryChainWrapper<>(noticeMapper)

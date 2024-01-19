@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface ProjectOrderService extends IService<ProjectOrder> {
-    public List<ProjectOrder> GetAllProjectOrder();
-    public Map<String, Integer> getOrderCounts();
+    List<ProjectOrder> GetAllProjectOrder();
+    Map<String, Integer> getOrderCounts();
+
+    List<Map<String, Object>> GetNumPlanPractial();
 }

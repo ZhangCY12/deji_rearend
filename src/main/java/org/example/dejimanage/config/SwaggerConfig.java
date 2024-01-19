@@ -38,4 +38,12 @@ public class SwaggerConfig {
                 .pathsToMatch("/notice/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi fivesGroup() {
+        return GroupedOpenApi.builder()
+                .group("user")
+                .pathsToMatch("/user/**")
+                .build();
+    }
 }

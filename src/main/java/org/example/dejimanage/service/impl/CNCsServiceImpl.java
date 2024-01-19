@@ -23,7 +23,6 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
 
     /***
      * 查询所有CNC机台的状态
-     * @return
      */
     @Override
     public List<String> GetAllCncStatus() {
@@ -32,7 +31,6 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
         queryWrapper.select(CNCs::getCncNum, CNCs::getOnlineStatus, CNCs::getCncStatus);
         List<CNCs> lists = cnCsMapper.selectList(queryWrapper);
         List<String> message = new ArrayList<>();
-        int i = 0;
         for (CNCs item : lists) {
             if (item.onlineStatus.equals("离线")) {
                 item.cncStatus = "离线";
@@ -41,10 +39,8 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
         }
         return message;
     }
-
     /***
-     * 查询机台各个状态的数量
-     * @return
+     * 查询cnc机台各个状态和数量
      */
     @Override
     public Map<String, Integer> GetALLNumberOfCncStatus() {

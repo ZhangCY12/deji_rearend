@@ -10,7 +10,9 @@ import java.util.Map;
 
 @Mapper
 public interface CNCsMapper extends BaseMapper<CNCs> {
-    //查询在线的机台状态及其数量
+    /***
+     * 查询在线的机台状态及其数量
+     */
     @Select("SELECT cnc_status, COUNT(*) as count " +
             "FROM t_cnc_run " +
             "WHERE online_status = '在线' " +
