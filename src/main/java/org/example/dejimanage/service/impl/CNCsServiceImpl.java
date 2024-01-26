@@ -65,4 +65,17 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
         return statusCounts;
 
     }
+
+    /***
+     * 查询机器的总类及其数量
+     */
+    @Override
+    public List<Map<String, Object>> getDeviceAndCount() {
+        List<Map<String, Object>> lists = cnCsMapper.selectDeviceAndCount();
+        Map<String,Object> map = new HashMap<>();
+        map.put("name","其他");
+        map.put("count",0);
+        lists.add(map);
+        return lists;
+    }
 }

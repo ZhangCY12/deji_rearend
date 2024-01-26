@@ -31,12 +31,12 @@ public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, Energ
         //逻辑：当天总电量减去前一天总电量为当天用电量
         for (int i = energyTotals.size() - 2; i >=0; i--) {
             Map<String,String> map = new HashMap<>();
-            double nowEle = Double.parseDouble(energyTotals.get(i).activeEnergyTotal);
-            double yesterdayEle = Double.parseDouble(energyTotals.get(i+1).activeEnergyTotal);
+            double nowEle = Double.parseDouble(energyTotals.get(i).activeEnergyTotal1);
+            double yesterdayEle = Double.parseDouble(energyTotals.get(i+1).activeEnergyTotal1);
             map.put("activeEnergyTotal",(nowEle-yesterdayEle)+"");
             map.put("date",energyTotals.get(i).date.substring(energyTotals.get(i).date.length() - 2));
-            map.put("humidity",energyTotals.get(i).humidity);
-            map.put("temperature",energyTotals.get(i).temperature);
+            map.put("humidity",energyTotals.get(i).humidity1);
+            map.put("temperature",energyTotals.get(i).temperature1);
             lists.add(map);
         }
         return lists;

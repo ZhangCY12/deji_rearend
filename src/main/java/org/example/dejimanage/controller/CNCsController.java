@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/CNCs")
@@ -38,5 +39,10 @@ public class CNCsController {
     @GetMapping("/status/number")
     public Result GetALLNumberOfCncStatus(){
         return Result.ok().data("status_number",cnCsService.GetALLNumberOfCncStatus());
+    }
+
+    @GetMapping("/deviceAndCount")
+    public Result getDeviceAndCount() {
+        return Result.ok().data("DeviceAndCount",cnCsService.getDeviceAndCount());
     }
 }

@@ -18,4 +18,15 @@ public interface CNCsMapper extends BaseMapper<CNCs> {
             "WHERE online_status = '在线' " +
             "GROUP BY cnc_status")
     List<Map<String, Object>> countByStatus();
+
+
+    /***
+     * 查询CNC设备名称及其数量
+     * @return
+     */
+    @Select("SELECT commucation AS name, " +
+            "COUNT(*) AS count " +
+            "FROM t_cnc_run " +
+            "GROUP BY commucation")
+    List<Map<String, Object>> selectDeviceAndCount();
 }
