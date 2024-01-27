@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @TableName("t_liteweb_project")
-public class ProjectOrder {
+public class ProjectOrder implements Serializable {
     @TableId("projectCode")
     public String projectCode;// 工单编号
     public String status;// 工单状态 枚举备注: 0 :未开始 10 :执行中 20 :已结束

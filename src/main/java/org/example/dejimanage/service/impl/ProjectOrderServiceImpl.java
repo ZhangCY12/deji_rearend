@@ -4,7 +4,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.dejimanage.entity.ProjectOrder;
 import org.example.dejimanage.mapper.ProjectOrderMapper;
 import org.example.dejimanage.service.ProjectOrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,12 +21,15 @@ public class ProjectOrderServiceImpl extends ServiceImpl<ProjectOrderMapper, Pro
 
     @Autowired
     private ProjectOrderMapper projectOrderMapper;
+    private static final Logger logger = LoggerFactory.getLogger(ProjectOrderServiceImpl.class);
 
     /***
      * 查询2024年以来新工单
      */
     @Override
+    @Cacheable(value = "ProjectOrder")//配置redis缓存
     public List<ProjectOrder> GetAllProjectOrder() {
+        logger.info("请求_查询2024年以来新工单");
         List<ProjectOrder> lists = projectOrderMapper.selectOrdersFrom2024();
         for(ProjectOrder item :lists){
             item.planamount = item.planamount.split("\\.")[0];
@@ -30,6 +37,7 @@ public class ProjectOrderServiceImpl extends ServiceImpl<ProjectOrderMapper, Pro
             item.numberofdefectives = item.numberofdefectives.split("\\.")[0];
             item.actualamount = item.actualamount.split("\\.")[0];
         }
+        logger.info("redis_存入2024年以来新工单进入缓存");
         return lists;
     }
 
@@ -43,6 +51,7 @@ public class ProjectOrderServiceImpl extends ServiceImpl<ProjectOrderMapper, Pro
         counts.put("processing", projectOrderMapper.countProcessingOrders());
         counts.put("notStarted", projectOrderMapper.countNotStartedOrders());
         counts.put("totalOrders",projectOrderMapper.totalOfAllOrders());
+        logger.info("请求_查询各个工单状态的数量（已结束、未开始、加工中、总数）");
         return counts;
     }
     /***
@@ -59,15 +68,19 @@ public class ProjectOrderServiceImpl extends ServiceImpl<ProjectOrderMapper, Pro
             for (Map.Entry<String, Object> entry : listPractial.get(i).entrySet()) {
                 String key = entry.getKey();
                 Object value = entry.getValue();
-                // 如果key在第一个Map中已存在，你可以选择覆盖它，或者合并值
-                // 此例中，我们选择覆盖旧值
+                // 选择覆盖旧值
                 map.put(key, value);
             }
             // 将第一个列表的Map元素添加到组合Map中
             map.putAll(listPlan.get(i));
-
             reslut.add(map);
         }
+        logger.info("请求_查询每个月份的工单计划数和实际数");
         return reslut;
+    }
+    @CacheEvict(value = "ProjectOrder", allEntries = true)
+    public void clearProjectCache() {
+        // 清除ProjectOrder缓存
+        logger.info("redis_清理2024年以来新工单缓存");
     }
 }

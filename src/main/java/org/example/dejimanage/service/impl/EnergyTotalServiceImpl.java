@@ -5,7 +5,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.dejimanage.entity.EnergyTotal;
 import org.example.dejimanage.mapper.EnergyTotalMapper;
 import org.example.dejimanage.service.EnergyTotalService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,7 +21,7 @@ import java.util.Map;
 public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, EnergyTotal> implements EnergyTotalService {
     @Autowired
     private EnergyTotalMapper energyTotalMapper;
-
+    private static final Logger logger = LoggerFactory.getLogger(EnergyTotalServiceImpl.class);
     /**
      * 计算过去10天，每天的平均温湿度，和用电量
      */
@@ -39,11 +43,12 @@ public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, Energ
             map.put("temperature",energyTotals.get(i).temperature1);
             lists.add(map);
         }
+        logger.info("请求_查询过去10天，每天的平均温湿度，和用电量");
         return lists;
     }
 
     /***
-     * 查询当天的能源信息
+     * 查询当天的用电量、温湿度信息
      */
     @Override
     public List<EnergyTotal> GetNowEnergy() {
@@ -51,8 +56,8 @@ public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, Energ
                 .last("limit 1")
                 .orderByDesc(EnergyTotal::getDate)
                 .list();
+        logger.info("请求_当天的用电量、温湿度信息");
         return energyTotals;
     }
-
 
 }

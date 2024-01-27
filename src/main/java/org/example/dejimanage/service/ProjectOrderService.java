@@ -11,4 +11,6 @@ public interface ProjectOrderService extends IService<ProjectOrder> {
     Map<String, Integer> getOrderCounts();
 
     List<Map<String, Object>> GetNumPlanPractial();
+
+    void clearProjectCache();
 }

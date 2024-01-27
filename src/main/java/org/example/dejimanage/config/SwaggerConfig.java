@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
+//Swagger配置类
 @Configuration
 @EnableWebMvc
 public class SwaggerConfig {

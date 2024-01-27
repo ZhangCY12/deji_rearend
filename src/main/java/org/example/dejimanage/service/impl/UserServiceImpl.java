@@ -5,6 +5,8 @@ import org.example.dejimanage.entity.DTO.UserDTO;
 import org.example.dejimanage.entity.User;
 import org.example.dejimanage.mapper.UserMapper;
 import org.example.dejimanage.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserMapper userMapper;
-
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     /***
      * 查询各个部门及其人数
      */
@@ -30,6 +32,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         for(UserDTO item : lists){
             maps.put(item.getGroupNames(),item.getCount());
         }
+        logger.info("请求_查询各个部门及其人数");
         return maps;
     }
 }

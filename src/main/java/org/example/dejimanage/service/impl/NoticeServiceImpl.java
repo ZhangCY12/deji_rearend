@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.dejimanage.entity.Notice;
 import org.example.dejimanage.mapper.NoticeMapper;
 import org.example.dejimanage.service.NoticeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
 
     @Autowired
     private NoticeMapper noticeMapper;
-
+    private static final Logger logger = LoggerFactory.getLogger(NoticeServiceImpl.class);
 
     /***
      * 查询最新的一条公告
@@ -30,6 +32,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
                 .list();
         Map<String,String> notice = new HashMap<>();
         notice.put("notice",energyTotals.get(0).getContent());
+        logger.info("请求_查询最新的一条公告");
         return notice;
     }
 }

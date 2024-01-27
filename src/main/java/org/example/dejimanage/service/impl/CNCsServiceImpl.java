@@ -6,12 +6,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.dejimanage.entity.CNCs;
 import org.example.dejimanage.mapper.CNCsMapper;
 import org.example.dejimanage.service.CNCsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ import java.util.Map;
 public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CNCsService {
     @Autowired
     private CNCsMapper cnCsMapper;
-
+    private static final Logger logger = LoggerFactory.getLogger(CNCsServiceImpl.class);
     /***
      * 查询所有CNC机台的状态
      */
@@ -37,6 +36,7 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
             }
             message.add(item.cncNum + " " + item.cncStatus);
         }
+        logger.info("请求_查询所有CNC机台状态");
         return message;
     }
     /***
@@ -62,12 +62,12 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
         }
         statusCounts.put("离线",offlineCount);
         statusCounts.put("总数",allNumber);
+        logger.info("请求_查询cnc机台各个状态和数量");
         return statusCounts;
-
     }
 
     /***
-     * 查询机器的总类及其数量
+     * 查询机台的总类及其数量
      */
     @Override
     public List<Map<String, Object>> getDeviceAndCount() {
@@ -76,6 +76,7 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
         map.put("name","其他");
         map.put("count",0);
         lists.add(map);
+        logger.info("请求_查询机台的总类及其数量");
         return lists;
     }
 }

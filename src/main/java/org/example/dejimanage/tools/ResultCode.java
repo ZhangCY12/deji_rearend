@@ -13,7 +13,7 @@ package org.example.dejimanage.tools;
 public enum ResultCode implements CustomizeResultCode{
     SUCCESS(200, "成功"),
     /*错误*/
-    ERROR(400, "错误失败"),
+    ERROR(500, "错误失败"),
 
     /* 默认失败 */
     COMMON_FAIL(999, "失败"),
