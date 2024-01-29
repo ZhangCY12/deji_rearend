@@ -7,4 +7,5 @@ public class Constants {
         throw new AssertionError("Cannot instantiate constant utility class");
     }
     public static final int PROJECT_TIME = 10*60*1000; //查询2024年以来工单总信息的缓存存在时间
+    public static final String CNC_DAILY_OPERATION_TIME = "0 59 23 * * ?";
 }

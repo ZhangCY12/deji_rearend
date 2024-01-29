@@ -32,7 +32,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
                 .list();
         Map<String,String> notice = new HashMap<>();
         notice.put("notice",energyTotals.get(0).getContent());
-        logger.info("请求_查询最新的一条公告");
+        logger.info("请求(公告)_查询最新的一条公告");
         return notice;
     }
 }

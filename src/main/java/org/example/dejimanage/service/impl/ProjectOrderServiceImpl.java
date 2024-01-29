@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,7 @@ public class ProjectOrderServiceImpl extends ServiceImpl<ProjectOrderMapper, Pro
 
     @Autowired
     private ProjectOrderMapper projectOrderMapper;
-    private static final Logger logger = LoggerFactory.getLogger(ProjectOrderServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProjectOrderServiceImpl.class);//日志对象
 
     /***
      * 查询2024年以来新工单
@@ -51,7 +50,7 @@ public class ProjectOrderServiceImpl extends ServiceImpl<ProjectOrderMapper, Pro
         counts.put("processing", projectOrderMapper.countProcessingOrders());
         counts.put("notStarted", projectOrderMapper.countNotStartedOrders());
         counts.put("totalOrders",projectOrderMapper.totalOfAllOrders());
-        logger.info("请求_查询各个工单状态的数量（已结束、未开始、加工中、总数）");
+        logger.info("请求(工单)_查询各个工单状态的数量（已结束、未开始、加工中、总数）");
         return counts;
     }
     /***
@@ -75,12 +74,16 @@ public class ProjectOrderServiceImpl extends ServiceImpl<ProjectOrderMapper, Pro
             map.putAll(listPlan.get(i));
             reslut.add(map);
         }
-        logger.info("请求_查询每个月份的工单计划数和实际数");
+        logger.info("请求(工单)_查询每个月份的工单计划数和实际数");
         return reslut;
     }
+
+    /***
+     * 清除缓存（名：ProjectOrder）中的2024年以来新工单数据
+     */
     @CacheEvict(value = "ProjectOrder", allEntries = true)
     public void clearProjectCache() {
         // 清除ProjectOrder缓存
-        logger.info("redis_清理2024年以来新工单缓存");
+        logger.info("定时任务_redis_清理2024年以来新工单缓存");
     }
 }

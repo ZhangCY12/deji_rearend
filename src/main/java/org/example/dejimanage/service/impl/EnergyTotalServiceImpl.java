@@ -8,10 +8,7 @@ import org.example.dejimanage.service.EnergyTotalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +40,7 @@ public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, Energ
             map.put("temperature",energyTotals.get(i).temperature1);
             lists.add(map);
         }
-        logger.info("请求_查询过去10天，每天的平均温湿度，和用电量");
+        logger.info("请求(能源)_查询过去10天，每天的平均温湿度，和用电量");
         return lists;
     }
 
@@ -56,7 +53,7 @@ public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, Energ
                 .last("limit 1")
                 .orderByDesc(EnergyTotal::getDate)
                 .list();
-        logger.info("请求_当天的用电量、温湿度信息");
+        logger.info("请求(能源)_当天的用电量、温湿度信息");
         return energyTotals;
     }
 

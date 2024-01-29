@@ -32,7 +32,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         for(UserDTO item : lists){
             maps.put(item.getGroupNames(),item.getCount());
         }
-        logger.info("请求_查询各个部门及其人数");
+        logger.info("请求(人员)_查询各个部门及其人数");
         return maps;
     }
 }

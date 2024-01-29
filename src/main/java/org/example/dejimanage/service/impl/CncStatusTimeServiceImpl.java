@@ -25,7 +25,7 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
     public List<CncStatusTime> GetAllCncStatusTime(){
         QueryWrapper<CncStatusTime> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc("cnc_num");
-        logger.info("请求_查询所有cnc机台的稼动率、运行时间、待机时间、异常时间");
+        logger.info("请求(cnc)_查询所有cnc机台的稼动率、运行时间、待机时间、异常时间");
         return cncStatusTimeMapper.selectList(queryWrapper);
     }
 }

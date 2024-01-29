@@ -1,15 +1,13 @@
+<!--日志文件配置-->
 <configuration>
-
     <property name="LOG_HOME" value="D:/JavaLog"/>
     <property name="FILE_NAME" value="myapp-log"/>
-
     <!-- 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
         </encoder>
     </appender>
-
     <!-- 文件Appender，每天滚动 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoder>
@@ -21,7 +19,6 @@
             <maxHistory>30</maxHistory>
         </rollingPolicy>
     </appender>
-
     <!-- 根日志记录器配置 -->
     <root level="info">
         <appender-ref ref="STDOUT"/>

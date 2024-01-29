@@ -36,7 +36,7 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
             }
             message.add(item.cncNum + " " + item.cncStatus);
         }
-        logger.info("请求_查询所有CNC机台状态");
+        logger.info("请求(cnc)_查询所有CNC机台状态");
         return message;
     }
     /***
@@ -62,7 +62,7 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
         }
         statusCounts.put("离线",offlineCount);
         statusCounts.put("总数",allNumber);
-        logger.info("请求_查询cnc机台各个状态和数量");
+        logger.info("请求(cnc)_查询cnc机台各个状态和数量");
         return statusCounts;
     }
 
@@ -76,7 +76,7 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
         map.put("name","其他");
         map.put("count",0);
         lists.add(map);
-        logger.info("请求_查询机台的总类及其数量");
+        logger.info("请求(cnc)_查询机台的总类及其数量");
         return lists;
     }
 }
