@@ -24,7 +24,7 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
      * 查询所有CNC机台的状态
      */
     @Override
-    public List<String> GetAllCncStatus() {
+    public List<String> getAllCncStatus() {
         LambdaQueryWrapper<CNCs> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByAsc(CNCs::getCncNum);
         queryWrapper.select(CNCs::getCncNum, CNCs::getOnlineStatus, CNCs::getCncStatus);
@@ -43,7 +43,7 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
      * 查询cnc机台各个状态和数量
      */
     @Override
-    public Map<String, Integer> GetALLNumberOfCncStatus() {
+    public Map<String, Integer> getALLNumberOfCncStatus() {
         List<Map<String, Object>> results = cnCsMapper.countByStatus();
         // 查询不在线的机器数量
         QueryWrapper<CNCs> queryWrapperOffline = new QueryWrapper<>();
@@ -78,5 +78,15 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
         lists.add(map);
         logger.info("请求(cnc)_查询机台的总类及其数量");
         return lists;
+    }
+
+    /***
+     * 根据Id查询主轴速度和切削速度
+     * @param id
+     */
+    @Override
+    public Map<String, Object> getSpeedOfMainCut(int id) {
+        logger.info("请求(cnc)_查询单机台的主轴速度和切屑速度（id::"+id+")");
+        return cnCsMapper.selectSpeedOfMainCut(id);
     }
 }

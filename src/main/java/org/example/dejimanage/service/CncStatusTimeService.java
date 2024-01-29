@@ -5,7 +5,9 @@ import org.example.dejimanage.entity.CncStatusTime;
 
 
 import java.util.List;
+import java.util.Map;
 
 public interface CncStatusTimeService extends IService<CncStatusTime> {
-    public List<CncStatusTime> GetAllCncStatusTime();
+    List<CncStatusTime> getAllCncStatusTime();
+    Map<String,Object> getCncStatusByid(int id);
 }

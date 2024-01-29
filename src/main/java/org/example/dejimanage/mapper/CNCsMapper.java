@@ -22,11 +22,18 @@ public interface CNCsMapper extends BaseMapper<CNCs> {
 
     /***
      * 查询CNC设备名称及其数量
-     * @return
      */
     @Select("SELECT commucation AS name, " +
             "COUNT(*) AS count " +
             "FROM t_cnc_run " +
             "GROUP BY commucation")
     List<Map<String, Object>> selectDeviceAndCount();
+
+    /***
+     * 查询主轴速度及切削速度
+     */
+    @Select("SELECT cnc_num,speed_main,speed_cut " +
+            "FROM t_cnc_run " +
+            "WHERE cnc_num = #{id}")
+    Map<String,Object> selectSpeedOfMainCut(int id);
 }
