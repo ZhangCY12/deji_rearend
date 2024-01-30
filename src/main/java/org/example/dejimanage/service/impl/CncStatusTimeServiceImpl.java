@@ -4,19 +4,24 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.dejimanage.entity.CncStatusTime;
 import org.example.dejimanage.mapper.CncStatusTimeMapper;
+import org.example.dejimanage.mapper.DailyOperationMapper;
 import org.example.dejimanage.service.CncStatusTimeService;
+import org.example.dejimanage.tools.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.text.DecimalFormat;
+import java.time.LocalTime;
+import java.util.*;
 
 @Service
 public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, CncStatusTime> implements CncStatusTimeService {
     @Autowired
     private CncStatusTimeMapper cncStatusTimeMapper;
+    @Autowired
+    private DailyOperationMapper dailyOperationMapper;
     private static final Logger logger = LoggerFactory.getLogger(CncStatusTimeServiceImpl.class);
 
     /***
@@ -32,11 +37,103 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
 
     /***
      * 根据id查询单台机的实时稼动率
-     * @param id
+     * @param id 机器号
      */
     @Override
     public Map<String, Object> getCncStatusByid(int id) {
         logger.info("请求(cnc)_查询单机台的稼动率(id::"+id+")");
         return cncStatusTimeMapper.selectCncRateByid(id);
+    }
+
+    /***
+     *  根据Id查询单机实时运行时间情况
+     * @param id 机器号
+     * @return 返回小时的数值（例：5.8小时）
+     */
+    @Override
+    public Map<String, Object> getCncRuntimeByid(int id) {
+        // 从数据库查询
+        CncStatusTime cncStatusTime = cncStatusTimeMapper.selectCncRuntimeByid(id);
+        // 将字符串转换成LocalTime对象
+        LocalTime runTime =  LocalTime.parse(cncStatusTime.getRunTime());
+        LocalTime idleTime = LocalTime.parse(cncStatusTime.getIdleTime());
+        LocalTime errorTime = LocalTime.parse(cncStatusTime.getErrorTime());
+        // 计算总的活动时间
+        long totalMinutes = runTime.toSecondOfDay() +
+                idleTime.toSecondOfDay() +
+                errorTime.toSecondOfDay();
+        // 获取当前时间
+        LocalTime now = LocalTime.now() ;
+        // 计算离线时间
+        // 注意：这里假设活动时间不会超过当前时间，否则需要做额外处理
+
+        long offlineSeconds = now.toSecondOfDay() - totalMinutes;
+        // 如果计算结果为负数，表示活动时间超过了当前时间，可以根据实际需求处理这种情况
+        if (offlineSeconds < 0) {
+            // 处理逻辑，例如设置为0或者返回特定值
+            offlineSeconds = 0;
+        }
+        //规范数据小数点后1位
+        DecimalFormat df = new DecimalFormat("#.0");
+        // 将秒数转换为小时
+        double offlineHours = offlineSeconds / 3600.0;
+        double runTimeHours = runTime.toSecondOfDay() / 3600.0;
+        double idleTimeHours = idleTime.toSecondOfDay() / 3600.0;
+        double errorTimeHours = errorTime.toSecondOfDay() / 3600.0;
+
+        // 封装到Map中
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("runTimeHours",  Double.parseDouble(df.format(runTimeHours)));
+        result.put("idleTimeHours", Double.parseDouble(df.format(idleTimeHours)));
+        result.put("errorTimeHours", Double.parseDouble(df.format(errorTimeHours)));
+        result.put("offlineHours", Double.parseDouble(df.format(offlineHours)));
+
+        logger.info("请求(cnc)_查询单机台实时运行时间情况(id::"+id+")");
+        return result;
+    }
+
+    /***
+     * 根据Id查询历史稼动率信息
+     * @param id 机器编号
+     * @return 历史稼动率信息
+     */
+    @Override
+    public List<Map<String, Object>> getCncHistoryRateByid(int id) {
+        List<Map<String,Object>> results = dailyOperationMapper.selectRuntimeByid(id);
+        if (results.isEmpty()){
+            return null;
+        }
+        if(results.size() == 10) {
+            //有10条数据直接返回
+            return results;
+        }else {
+            //数据不足则补0
+            List<Map<String,Object>> lists = new ArrayList<>();
+            Map<String,Object> firstMap = results.get(0);
+            Date day = (Date) firstMap.get("date");//得到最新的一天日期
+            int Lenght = results.size();
+            for (int i = 0; i < 10-Lenght; i++) {
+                Map<String,Object> map = new HashMap<>();
+                map.put("date", DateUtils.calculateDateBefore(day,10-i));
+                map.put("operation_rate",0.00);
+                lists.add(map);
+            }
+            for(int i = Lenght-1; i >= 0; i--){
+                Map<String, Object> map = new HashMap<>();
+                for (Map.Entry<String, Object> entry : results.get(i).entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if(key.equals("date")){
+                        map.put(key,DateUtils.formatDateMonth((Date) value));
+                    }else{
+                        map.put(key,value);
+                    }
+                }
+                lists.add(map);
+            }
+            return lists;
+
+        }
     }
 }

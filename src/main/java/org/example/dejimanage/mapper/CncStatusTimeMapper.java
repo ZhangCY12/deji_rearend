@@ -11,11 +11,16 @@ import java.util.Map;
 public interface CncStatusTimeMapper extends BaseMapper<CncStatusTime> {
     /***
      * 根据Id查询单台机稼动率、运行时间等信息
-     * @param id
      */
     @Select("SELECT cnc_num,utilization_rate " +
             "FROM t_cnc_status_time " +
             "WHERE cnc_num = #{id}")
     Map<String,Object> selectCncRateByid(int id);
 
+
+    /***
+     * 根据id查询单机的运行时间情况
+     */
+    @Select("SELECT run_time,idle_time,error_time FROM t_cnc_status_time WHERE cnc_num = #{id}")
+    CncStatusTime selectCncRuntimeByid(int id);
 }

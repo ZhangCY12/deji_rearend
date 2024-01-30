@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.sun.jna.platform.win32.Guid;
 import lombok.Data;
 
+//cnc机台实体类
 @Data
 @TableName("t_cnc_run")
 public class CNCs {

@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,11 +84,31 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
 
     /***
      * 根据Id查询主轴速度和切削速度
-     * @param id
+     * @param id 机器号
      */
     @Override
     public Map<String, Object> getSpeedOfMainCut(int id) {
         logger.info("请求(cnc)_查询单机台的主轴速度和切屑速度（id::"+id+")");
         return cnCsMapper.selectSpeedOfMainCut(id);
+    }
+
+    /***
+     * 插入机器加工的总工件数(产量)
+     */
+    @Override
+    @Transactional
+    public void insertAllArtifacts() {
+        logger.info("定时任务_插入机器加工的总工件数(产量)");
+        cnCsMapper.insertAllArtifacts();
+    }
+
+    /***
+     * 根据id查询所有信息
+     * @param id 机器号
+     * @return 所有信息
+     */
+    @Override
+    public Map<String, Object> getAllInfoByid(int id) {
+        return cnCsMapper.selectAllByid(id);
     }
 }

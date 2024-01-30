@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+//员工实体类
 @Data
 @TableName("t_liteweb_user")
 public class User {

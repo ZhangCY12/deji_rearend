@@ -18,7 +18,7 @@ import java.util.Map;
 public class EnergyTotalServiceImpl extends ServiceImpl<EnergyTotalMapper, EnergyTotal> implements EnergyTotalService {
     @Autowired
     private EnergyTotalMapper energyTotalMapper;
-    private static final Logger logger = LoggerFactory.getLogger(EnergyTotalServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(EnergyTotalServiceImpl.class);//日志记录对象
     /**
      * 计算过去10天，每天的平均温湿度，和用电量
      */

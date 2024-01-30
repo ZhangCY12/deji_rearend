@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+//CNC当前状态实体类
 @Data
 @TableName("t_cnc_status_time")
 public class CncStatusTime {

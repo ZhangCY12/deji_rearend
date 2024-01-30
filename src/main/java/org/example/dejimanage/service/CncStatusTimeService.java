@@ -10,4 +10,8 @@ import java.util.Map;
 public interface CncStatusTimeService extends IService<CncStatusTime> {
     List<CncStatusTime> getAllCncStatusTime();
     Map<String,Object> getCncStatusByid(int id);
+
+    Map<String,Object> getCncRuntimeByid(int id);
+
+    List<Map<String,Object>> getCncHistoryRateByid(int id);
 }
