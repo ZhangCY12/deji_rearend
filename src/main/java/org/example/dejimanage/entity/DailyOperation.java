@@ -12,10 +12,10 @@ import java.sql.Date;
 public class DailyOperation {
     @TableId("id")
     private int id;
-    private int machineId;
-    private Date date;
-    private String operationRate;
-    private String runTime;
-    private String standbyTime;
-    private String errorTime;
+    private int machineId; //机器号
+    private Date date; //日期
+    private String operationRate; //稼动率
+    private String runTime; //运行时间
+    private String standbyTime; //待机时间
+    private String errorTime; //报警时间
 }

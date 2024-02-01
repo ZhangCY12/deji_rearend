@@ -2,6 +2,7 @@ package org.example.dejimanage.tools;
 
 import org.example.dejimanage.config.Constants;
 import org.example.dejimanage.service.CNCsService;
+import org.example.dejimanage.service.CncAlarmAllService;
 import org.example.dejimanage.service.DailyOperationService;
 import org.example.dejimanage.service.ProjectOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class ScheduledTasks {
 
     @Autowired
     private CNCsService cnCsService;
+
+    @Autowired
+    private CncAlarmAllService cncAlarmAllService;
 
     /***
      * 定时任务：清理2024年以来工单表在redis中的缓存
@@ -40,7 +44,14 @@ public class ScheduledTasks {
      * 定时任务：记录每天所有机台的产量
      */
     @Scheduled(cron = Constants.CNC_DAILY_OPERATION_TIME)
-    public void inserttCncDailyProduction() {
+    public void insertCncDailyProduction() {
         cnCsService.insertAllArtifacts();
+    }
+    /***
+     * 定时任务：记录每天的报警次数
+     */
+    @Scheduled(cron = Constants.CNC_DAILY_OPERATION_TIME)
+    public void insertCncDailyAlarm() {
+        cncAlarmAllService.recordDailyMachineAlarms();
     }
 }

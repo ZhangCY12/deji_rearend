@@ -21,6 +21,8 @@ public interface CncStatusTimeMapper extends BaseMapper<CncStatusTime> {
     /***
      * 根据id查询单机的运行时间情况
      */
-    @Select("SELECT run_time,idle_time,error_time FROM t_cnc_status_time WHERE cnc_num = #{id}")
+    @Select("SELECT run_time,idle_time,error_time " +
+            "FROM t_cnc_status_time " +
+            "WHERE cnc_num = #{id}")
     CncStatusTime selectCncRuntimeByid(int id);
 }

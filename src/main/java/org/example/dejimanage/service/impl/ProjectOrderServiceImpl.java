@@ -61,21 +61,39 @@ public class ProjectOrderServiceImpl extends ServiceImpl<ProjectOrderMapper, Pro
         List<Map<String, Object>> listPlan = projectOrderMapper.countOrdersByMonthPlan();
         List<Map<String, Object>> listPractial = projectOrderMapper.countOrdersByMonthPractial();
         List<Map<String, Object>> reslut = new ArrayList<>();
-        for (int i = listPlan.size() - 1; i >= 0; i--) {
-            Map<String, Object> map = new HashMap<>();
-            // 遍历第二个列表的Map，添加其元素到组合Map中
-            for (Map.Entry<String, Object> entry : listPractial.get(i).entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                // 选择覆盖旧值
-                map.put(key, value);
+
+        //月初时可能造成计划数组长度与实际数组长度不一致
+        if(listPlan.size() != listPractial.size()){
+            for(int i = listPractial.size() - 1; i >= 0; i--) {
+                Map<String, Object> map = new HashMap<>();
+                map.putAll(listPlan.get(i+1));
+                // 将第一个列表的Map元素添加到组合Map中
+                map.putAll(listPractial.get(i));
+                System.out.println(listPractial.get(i));
+                reslut.add(map);
+
             }
-            // 将第一个列表的Map元素添加到组合Map中
-            map.putAll(listPlan.get(i));
-            reslut.add(map);
+            Map<String, Object> firstMap = listPlan.get(0);
+            firstMap.put("Practialcount",0);
+            reslut.add(firstMap);
+            return reslut;
+        }else{
+            for(int i = listPlan.size() - 1; i >= 0; i--) {
+                Map<String, Object> map = new HashMap<>();
+                // 遍历第二个列表的Map，添加其元素到组合Map中
+                for (Map.Entry<String, Object> entry : listPractial.get(i).entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    // 选择覆盖旧值
+                    map.put(key, value);
+                }
+                // 将第一个列表的Map元素添加到组合Map中
+                map.putAll(listPlan.get(i));
+                reslut.add(map);
+            }
+            logger.info("请求(工单)_查询每个月份的工单计划数和实际数");
+            return reslut;
         }
-        logger.info("请求(工单)_查询每个月份的工单计划数和实际数");
-        return reslut;
     }
 
     /***

@@ -52,4 +52,10 @@ public interface CNCsMapper extends BaseMapper<CNCs> {
      */
     @Select("SELECT * FROM t_cnc_run WHERE cnc_num = #{id}")
     Map<String,Object> selectAllByid(int id);
+
+    /***
+     * 查询所有机台的id
+     */
+    @Select("SELECT cnc_no FROM t_cnc_run")
+    List<String> selectAllMachineIds();
 }

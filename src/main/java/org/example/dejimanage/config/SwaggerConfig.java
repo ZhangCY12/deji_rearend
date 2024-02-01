@@ -55,4 +55,12 @@ public class SwaggerConfig {
                 .pathsToMatch("/maintenance/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi sevenGroup(){
+        return GroupedOpenApi.builder()
+                .group("CncAlarm")
+                .pathsToMatch("/CncAlarm/**")
+                .build();
+    }
 }
