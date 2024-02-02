@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface EnergyTotalService extends IService<EnergyTotal> {
-    List<Map<String,String>> GetAllEnergy();
-    List<EnergyTotal> GetNowEnergy();
+    List<Map<String,Object>> GetAllEnergy();
+    List<Map<String,Object>> GetNowEnergy();
 }
