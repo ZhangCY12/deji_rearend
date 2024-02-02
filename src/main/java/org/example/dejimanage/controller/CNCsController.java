@@ -5,6 +5,7 @@ import org.example.dejimanage.entity.CncStatusTime;
 import org.example.dejimanage.service.CNCsService;
 import org.example.dejimanage.service.CncProductionService;
 import org.example.dejimanage.service.CncStatusTimeService;
+import org.example.dejimanage.service.DeviceProfileService;
 import org.example.dejimanage.tools.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,8 @@ public class CNCsController {
     private CNCsService cnCsService;
     @Autowired
     private CncProductionService cncProductionService;
+    @Autowired
+    private DeviceProfileService deviceProfileService;
 
 
 
@@ -78,5 +81,10 @@ public class CNCsController {
     @GetMapping("/allinfo/{id}")
     public Result GetAllInfoByid(@PathVariable int id){
         return  Result.ok().data("info",cnCsService.getAllInfoByid(id));
+    }
+
+    @GetMapping("/profile/{id}")
+    public Result GetdevideProfileByid(@PathVariable int id){
+        return  Result.ok().data("profile",deviceProfileService.getCncDeviceProfileByid(id));
     }
 }

@@ -9,8 +9,17 @@ import lombok.Data;
 @TableName("t_energy_total")
 public class EnergyTotal {
     @TableId("date")
-    public String date; //日期
-    public String activeEnergyTotal1; //总用电量
-    public String humidity1; //湿度
-    public String temperature1; //温度
+    private String date; //日期
+    private String activeEnergyTotal1; //总用电量
+    private String humidity1; //湿度
+    private String temperature1; //温度
+    private String activeEnergy1;
+    private String activeEnergyTotal2;
+    private String humidity2;
+    private String temperature2;
+    private String activeEnergy2;
+    private String activeEnergyTotal3;
+    private String humidity3;
+    private String temperature3;
+    private String activeEnergy3;
 }
