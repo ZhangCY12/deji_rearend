@@ -38,15 +38,6 @@ public interface CNCsMapper extends BaseMapper<CNCs> {
             "WHERE cnc_num = #{id}")
     Map<String,Object> selectSpeedOfMainCut(int id);
 
-    // 插入当日产能和总产能
-    @Insert("INSERT INTO t_cnc_production (machine_id, date, daily_production, total_production) " +
-            "SELECT r.cnc_num, CURDATE(), " +
-            "COALESCE(CAST(NULLIF(r.artifacts_all, '') AS DECIMAL) - " +
-            "COALESCE((SELECT CAST(NULLIF(total_production, '') AS DECIMAL) FROM t_cnc_production WHERE machine_id = r.cnc_num AND date = SUBDATE(CURDATE(), 1)), 0), 0), " +
-            "CAST(NULLIF(r.artifacts_all, '') AS DECIMAL) " +
-            "FROM t_cnc_run r")
-    void insertAllArtifacts();
-
     /***
      * 根据id查询所有信息
      */

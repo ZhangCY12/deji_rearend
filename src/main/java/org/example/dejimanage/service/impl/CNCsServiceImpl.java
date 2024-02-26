@@ -93,16 +93,6 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
     }
 
     /***
-     * 插入机器加工的总工件数(产量)
-     */
-    @Override
-    @Transactional
-    public void insertAllArtifacts() {
-        logger.info("定时任务_插入机器加工的总工件数(产量)");
-        cnCsMapper.insertAllArtifacts();
-    }
-
-    /***
      * 根据id查询所有信息
      * @param id 机器号
      * @return 所有信息

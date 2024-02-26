@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.example.dejimanage.entity.CncStatusTime;
 
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -25,4 +26,9 @@ public interface CncStatusTimeMapper extends BaseMapper<CncStatusTime> {
             "FROM t_cnc_status_time " +
             "WHERE cnc_num = #{id}")
     CncStatusTime selectCncRuntimeByid(int id);
+
+
+    @Select("SELECT cnc_num,run_time,idle_time,error_time,utilization_rate " +
+            "FROM t_cnc_status_time")
+    List<Map<String,Object>> selectAllCnc();
 }

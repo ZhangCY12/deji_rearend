@@ -21,10 +21,10 @@ public class DailyOperationServiceImpl extends ServiceImpl<DailyOperationMapper,
 
     @Autowired
     private DailyOperationMapper dailyOperationMapper;
-
     @Autowired
     private CncStatusTimeMapper cncStatusTimeMapper;
 
+    //日志记录
     private static final Logger logger = LoggerFactory.getLogger(DailyOperationServiceImpl.class);//日志记录对象
 
     /***

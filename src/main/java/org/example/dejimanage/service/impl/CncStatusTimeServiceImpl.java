@@ -66,8 +66,15 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
         LocalTime now = LocalTime.now() ;
         // 计算离线时间
         // 注意：这里假设活动时间不会超过当前时间，否则需要做额外处理
-
-        long offlineSeconds = now.toSecondOfDay() - totalMinutes;
+        long offlineSeconds = 1;
+        //判断当前时间是否在0-8、8-20、20-24这3个时段，用来判断白班与夜班
+        if(LocalTime.now().isAfter(LocalTime.of(8, 0)) && LocalTime.now().isBefore(LocalTime.of(20, 0))){
+            offlineSeconds = now.toSecondOfDay() - totalMinutes - 8 * 60 * 60;
+        }else if(LocalTime.now().isAfter(LocalTime.of(20, 0)) && LocalTime.now().isBefore(LocalTime.of(23, 59))){
+            offlineSeconds = now.toSecondOfDay() - totalMinutes - 20 * 60 * 60;
+        }else{
+            offlineSeconds = now.toSecondOfDay() - totalMinutes + 4 * 60 * 60;
+        }
         // 如果计算结果为负数，表示活动时间超过了当前时间，可以根据实际需求处理这种情况
         if (offlineSeconds < 0) {
             // 处理逻辑，例如设置为0或者返回特定值
@@ -106,7 +113,16 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
         }
         if(results.size() == 10) {
             //有10条数据直接返回
-            return results;
+            List<Map<String,Object>> lists = new ArrayList<>();
+            for (int i = 9; i >= 0; i--) {
+                Map<String,Object> map = new HashMap<>();
+                Map<String,Object> firstMap = results.get(i);
+                Date day = (Date) firstMap.get("date");//得到最新的一天日期
+                map.put("date", DateUtils.formatDateMonth(day));
+                map.put("operation_rate",firstMap.get("operation_rate"));
+                lists.add(map);
+            }
+            return lists;
         }else {
             //数据不足则补0
             List<Map<String,Object>> lists = new ArrayList<>();
