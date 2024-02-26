@@ -3,7 +3,6 @@ package org.example.dejimanage.controller;
 
 import org.example.dejimanage.entity.CncStatusTime;
 import org.example.dejimanage.service.CNCsService;
-import org.example.dejimanage.service.CncProductionService;
 import org.example.dejimanage.service.CncStatusTimeService;
 import org.example.dejimanage.service.DeviceProfileService;
 import org.example.dejimanage.tools.Result;
@@ -23,8 +22,6 @@ public class CNCsController {
     private CncStatusTimeService cncStatusTimeService;
     @Autowired
     private CNCsService cnCsService;
-    @Autowired
-    private CncProductionService cncProductionService;
     @Autowired
     private DeviceProfileService deviceProfileService;
 
@@ -61,11 +58,6 @@ public class CNCsController {
     @GetMapping("/utilization/{id}")
     public Result GetUtilizationRateByid(@PathVariable int id){
         return Result.ok().data("utilization",cncStatusTimeService.getCncStatusByid(id));
-    }
-
-    @GetMapping("/production/{id}")
-    public Result GetProductionByid(@PathVariable int id){
-        return Result.ok().data("production",cncProductionService.getCncProductionByid(id));
     }
 
     @GetMapping("/time/{id}")

@@ -106,7 +106,16 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
         }
         if(results.size() == 10) {
             //有10条数据直接返回
-            return results;
+            List<Map<String,Object>> lists = new ArrayList<>();
+            for (int i = 9; i >= 0; i--) {
+                Map<String,Object> map = new HashMap<>();
+                Map<String,Object> firstMap = results.get(i);
+                Date day = (Date) firstMap.get("date");//得到最新的一天日期
+                map.put("date", DateUtils.formatDateMonth(day));
+                map.put("operation_rate",firstMap.get("operation_rate"));
+                lists.add(map);
+            }
+            return lists;
         }else {
             //数据不足则补0
             List<Map<String,Object>> lists = new ArrayList<>();

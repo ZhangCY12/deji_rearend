@@ -30,7 +30,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<UserDTO> lists = userMapper.SelectNumberTotal();
         Map<String,Integer> maps = new HashMap<>();
         for(UserDTO item : lists){
-            maps.put(item.getGroupNames(),item.getCount());
+            if(item.getGroupNames().equals("")) {
+                maps.put("管理员",item.getCount());
+            }else{
+                maps.put(item.getGroupNames(),item.getCount());
+            }
+
         }
         logger.info("请求(人员)_查询各个部门及其人数");
         return maps;

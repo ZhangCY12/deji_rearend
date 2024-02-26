@@ -14,13 +14,10 @@ public class ScheduledTasks {
 
     @Autowired
     private ProjectOrderService projectOrderService;
-
     @Autowired
     private DailyOperationService dailyOperationService;
-
     @Autowired
     private CNCsService cnCsService;
-
     @Autowired
     private CncAlarmAllService cncAlarmAllService;
 
