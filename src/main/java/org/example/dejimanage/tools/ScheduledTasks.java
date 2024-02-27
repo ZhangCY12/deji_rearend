@@ -12,10 +12,6 @@ public class ScheduledTasks {
     @Autowired
     private ProjectOrderService projectOrderService;
     @Autowired
-    private DailyOperationService dailyOperationService;
-    @Autowired
-    private CNCsService cnCsService;
-    @Autowired
     private CncAlarmAllService cncAlarmAllService;
     @Autowired
     private CncClassesService cncClassesService;
@@ -26,14 +22,6 @@ public class ScheduledTasks {
     @Scheduled(fixedRate = Constants.PROJECT_TIME)
     public void transferData() {
         projectOrderService.clearProjectCache();
-    }
-
-    /***
-     * 定时任务：记录每天所有机台的稼动率和运行时间情况
-     */
-    @Scheduled(cron = Constants.CNC_DAILY_OPERATION_TIME)
-    public void insertIntotCncDailyOperation() {
-        dailyOperationService.insertMachineDailyOperation();
     }
 
     /***

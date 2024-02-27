@@ -33,12 +33,10 @@ public class CncClassesServiceImpl extends ServiceImpl<CncClassesMapper, CncClas
     @Transactional
     public void insertOperationDay() {
         List<Map<String,Object>> results = cncStatusTimeMapper.selectAllCnc();
-        LocalDate localDate = LocalDate.now();
-        Date sqlDate = java.sql.Date.valueOf(localDate);
         for(int i = 0;i < results.size();i++){
             CncClasses cncClasses = new CncClasses();
             Map<String,Object> entry = results.get(i);
-            cncClasses.setDate(sqlDate);
+            cncClasses.setDate(new Date());
             cncClasses.setClasses("白班");
             cncClasses.setMachineId((Integer) entry.get("cnc_num"));
             cncClasses.setOperationRate((String) entry.get("utilization_rate"));

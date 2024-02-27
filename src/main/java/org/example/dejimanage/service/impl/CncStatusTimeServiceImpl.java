@@ -3,10 +3,9 @@ package org.example.dejimanage.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.dejimanage.entity.CncStatusTime;
+import org.example.dejimanage.mapper.CncClassesMapper;
 import org.example.dejimanage.mapper.CncStatusTimeMapper;
-import org.example.dejimanage.mapper.DailyOperationMapper;
 import org.example.dejimanage.service.CncStatusTimeService;
-import org.example.dejimanage.tools.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
     @Autowired
     private CncStatusTimeMapper cncStatusTimeMapper;
     @Autowired
-    private DailyOperationMapper dailyOperationMapper;
+    private CncClassesMapper cncClassesMapper;
     private static final Logger logger = LoggerFactory.getLogger(CncStatusTimeServiceImpl.class);
 
     /***
@@ -101,55 +100,12 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
     }
 
     /***
-     * 根据Id查询历史稼动率信息
+     * 根据Id查询历史稼动率信息(由每天白班和夜班数据统计出)
      * @param id 机器编号
      * @return 历史稼动率信息
      */
     @Override
     public List<Map<String, Object>> getCncHistoryRateByid(int id) {
-        List<Map<String,Object>> results = dailyOperationMapper.selectRuntimeByid(id);
-        if (results.isEmpty()){
-            return null;
-        }
-        if(results.size() == 10) {
-            //有10条数据直接返回
-            List<Map<String,Object>> lists = new ArrayList<>();
-            for (int i = 9; i >= 0; i--) {
-                Map<String,Object> map = new HashMap<>();
-                Map<String,Object> firstMap = results.get(i);
-                Date day = (Date) firstMap.get("date");//得到最新的一天日期
-                map.put("date", DateUtils.formatDateMonth(day));
-                map.put("operation_rate",firstMap.get("operation_rate"));
-                lists.add(map);
-            }
-            return lists;
-        }else {
-            //数据不足则补0
-            List<Map<String,Object>> lists = new ArrayList<>();
-            Map<String,Object> firstMap = results.get(0);
-            Date day = (Date) firstMap.get("date");//得到最新的一天日期
-            int Lenght = results.size();
-            for (int i = 0; i < 10-Lenght; i++) {
-                Map<String,Object> map = new HashMap<>();
-                map.put("date", DateUtils.calculateDateBefore(day,10-i));
-                map.put("operation_rate",0.00);
-                lists.add(map);
-            }
-            for(int i = Lenght-1; i >= 0; i--){
-                Map<String, Object> map = new HashMap<>();
-                for (Map.Entry<String, Object> entry : results.get(i).entrySet()) {
-                    String key = entry.getKey();
-                    Object value = entry.getValue();
-                    if(key.equals("date")){
-                        map.put(key,DateUtils.formatDateMonth((Date) value));
-                    }else{
-                        map.put(key,value);
-                    }
-                }
-                lists.add(map);
-            }
-            return lists;
-
-        }
+        return null;
     }
 }
