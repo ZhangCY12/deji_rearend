@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.text.ParseException;
 import java.util.List;
 
 
@@ -66,7 +68,7 @@ public class CNCsController {
     }
 
     @GetMapping("/historyrate/{id}")
-    public Result GetHistoryRateByid(@PathVariable int id){
+    public Result GetHistoryRateByid(@PathVariable int id) throws ParseException {
         return  Result.ok().data("runtime",cncStatusTimeService.getCncHistoryRateByid(id));
     }
 

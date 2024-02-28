@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Mapper
 public interface ProjectOrderMapper extends BaseMapper<ProjectOrder> {
+
     /***
      * 查询2024年所有的工单
      */
@@ -17,6 +18,7 @@ public interface ProjectOrderMapper extends BaseMapper<ProjectOrder> {
             "FROM t_liteweb_project " +
             "WHERE STR_TO_DATE(createtime, '%Y-%m-%d %H:%i:%s') >= '2024-01-01' ")
     List<ProjectOrder> selectOrdersFrom2024();
+
     /***
      * 查询2024年已完成的工单数量
      */
@@ -26,6 +28,7 @@ public interface ProjectOrderMapper extends BaseMapper<ProjectOrder> {
             "AND actualendtime != '' " +
             "AND STR_TO_DATE(createtime, '%Y-%m-%d %H:%i:%s') >= '2024-01-01'")
     int countCompletedOrders();
+
     /***
      * 查询2024年加工中的工单数量
      */
@@ -35,6 +38,7 @@ public interface ProjectOrderMapper extends BaseMapper<ProjectOrder> {
             "AND actualendtime = '' " +
             "AND STR_TO_DATE(createtime, '%Y-%m-%d %H:%i:%s') >= '2024-01-01'")
     int countProcessingOrders();
+
     /***
      * 查询2024年来未开始的工单数量
      */
@@ -44,6 +48,7 @@ public interface ProjectOrderMapper extends BaseMapper<ProjectOrder> {
             "AND actualendtime = '' " +
             "AND STR_TO_DATE(createtime, '%Y-%m-%d %H:%i:%s') >= '2024-01-01'")
     int countNotStartedOrders();
+
     /***
      * 查询2024年所有工单总数
      */
@@ -51,6 +56,7 @@ public interface ProjectOrderMapper extends BaseMapper<ProjectOrder> {
             "FROM t_liteweb_project " +
             "WHERE STR_TO_DATE(createtime, '%Y-%m-%d %H:%i:%s') >= '2024-01-01'")
     int totalOfAllOrders();
+
     /***
      * 查询每个月份的计划数量
      */
@@ -60,6 +66,7 @@ public interface ProjectOrderMapper extends BaseMapper<ProjectOrder> {
             "GROUP BY year, month " +
             "ORDER BY year DESC, month DESC")
     List<Map<String, Object>> countOrdersByMonthPlan();
+
     /***
      * 查询每个月份的实际数量
      */

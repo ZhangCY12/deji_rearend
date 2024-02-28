@@ -9,6 +9,7 @@ public class DateUtils {
     private static final SimpleDateFormat DEFAULT_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat DATE_ONLY_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat DATE_MONTH_FORMAT = new SimpleDateFormat("dd");
+    private static final SimpleDateFormat DATE_MONTH_DAY_FORMAT = new SimpleDateFormat("MM-dd");
 
     /***
      * 返回整理后的时间格式
@@ -31,10 +32,19 @@ public class DateUtils {
     /***
      * 返回整理后的时间格式
      * @param date 原始日期
-     * @return 整理后：MM-dd 时间的格式
+     * @return 整理后：dd 时间的格式
      */
     public static String formatDateMonth(Date date) {
         return date != null ? DATE_MONTH_FORMAT.format(date) : null;
+    }
+
+    /***
+     * 返回整理后的时间格式
+     * @param date 原始日期
+     * @return 整理后：MM-dd 时间的格式
+     */
+    public static String formatDateMonthDay(Date date) {
+        return date != null ? DATE_MONTH_DAY_FORMAT.format(date) : null;
     }
 
     /**

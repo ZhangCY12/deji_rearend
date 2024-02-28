@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.example.dejimanage.entity.CncStatusTime;
 
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -13,5 +14,5 @@ public interface CncStatusTimeService extends IService<CncStatusTime> {
 
     Map<String,Object> getCncRuntimeByid(int id);
 
-    List<Map<String,Object>> getCncHistoryRateByid(int id);
+    List<Map<String,Object>> getCncHistoryRateByid(int id) throws ParseException;
 }

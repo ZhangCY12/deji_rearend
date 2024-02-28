@@ -6,12 +6,16 @@ import org.example.dejimanage.entity.CncStatusTime;
 import org.example.dejimanage.mapper.CncClassesMapper;
 import org.example.dejimanage.mapper.CncStatusTimeMapper;
 import org.example.dejimanage.service.CncStatusTimeService;
+import org.example.dejimanage.tools.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -54,9 +58,9 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
         // 从数据库查询
         CncStatusTime cncStatusTime = cncStatusTimeMapper.selectCncRuntimeByid(id);
         // 将字符串转换成LocalTime对象
-        LocalTime runTime =  LocalTime.parse(cncStatusTime.getRunTime());
-        LocalTime idleTime = LocalTime.parse(cncStatusTime.getIdleTime());
-        LocalTime errorTime = LocalTime.parse(cncStatusTime.getErrorTime());
+        LocalTime runTime =  LocalTime.parse(cncStatusTime.getRunTime()); //运行时间
+        LocalTime idleTime = LocalTime.parse(cncStatusTime.getIdleTime()); //待机时间
+        LocalTime errorTime = LocalTime.parse(cncStatusTime.getErrorTime()); //报警时间
         // 计算总的活动时间
         long totalMinutes = runTime.toSecondOfDay() +
                 idleTime.toSecondOfDay() +
@@ -65,7 +69,7 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
         LocalTime now = LocalTime.now() ;
         // 计算离线时间
         // 注意：这里假设活动时间不会超过当前时间，否则需要做额外处理
-        long offlineSeconds = 1;
+        long offlineSeconds;
         //判断当前时间是否在0-8、8-20、20-24这3个时段，用来判断白班与夜班
         if(LocalTime.now().isAfter(LocalTime.of(8, 0)) && LocalTime.now().isBefore(LocalTime.of(20, 0))){
             offlineSeconds = now.toSecondOfDay() - totalMinutes - 8 * 60 * 60;
@@ -105,7 +109,63 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
      * @return 历史稼动率信息
      */
     @Override
-    public List<Map<String, Object>> getCncHistoryRateByid(int id) {
-        return null;
+    public List<Map<String, Object>> getCncHistoryRateByid(int id){
+        List<Map<String,Object>> results = cncClassesMapper.selectCncClassesByid(id);
+        List<Map<String,Object>> lists = new ArrayList<>();
+        try{
+            for(int i = results.size() - 1;i >= 0; i-=2){
+                Map<String,Object> map = new HashMap<>();
+                Map<String, Object> entryDay = results.get(i-1);
+                Map<String, Object> entryNight = results.get(i);
+                String rateDay = (String) entryDay.get("operation_rate"); //白班稼动率
+                String rateNight = (String) entryNight.get("operation_rate"); //夜班稼动率
+                Date date = (Date) entryDay.get("date"); //日期
+                // 去除百分号，并将字符串转换为浮点数
+                double number1 = parsePercentage(rateDay);
+                double number2 = parsePercentage(rateNight);
+                // 计算平均稼动率
+                double average = (number1 + number2) / 2;
+
+                //将处理后的信息添加到map中
+                map.put("date", DateUtils.formatDateMonthDay(date));
+                map.put("rateDay",truncateAndMultiply(number1));
+                map.put("rateNight",truncateAndMultiply(number2));
+                map.put("rateAgv",truncateAndMultiply(average));
+
+                lists.add(map);
+            }
+        }
+        catch (ParseException e){
+            System.out.println(e);
+        }
+        logger.info("请求(cnc)_查询单机台历史白夜班稼动率(id::"+id+")");
+        return lists;
+    }
+
+    /***
+     * 将百分数字符串转换为浮点数
+     * @param percentage 百分数字符串（23.23%）
+     * @return double类型数字（23.23）
+     */
+    private static double parsePercentage(String percentage) throws ParseException {
+        NumberFormat format = NumberFormat.getPercentInstance();
+        Number number = format.parse(percentage);
+        return number.doubleValue();
+    }
+
+    /***
+     * 把多位0-1的小数转换为保留4位的百分数
+     * @param num 小数（0.2314151231231）
+     * @return 字符串百分数（23.14%）
+     */
+    public static double truncateAndMultiply(double num) {
+        // 使用 BigDecimal 处理精度问题
+        BigDecimal bd = new BigDecimal(Double.toString(num));
+        // 保留四位小数，并且使用 RoundingMode.HALF_UP 进行四舍五入
+        bd = bd.setScale(4, RoundingMode.HALF_UP);
+        // 乘以 100
+        bd = bd.multiply(new BigDecimal("100"));
+        // 转换为 double 类型并返回
+        return bd.doubleValue();
     }
 }

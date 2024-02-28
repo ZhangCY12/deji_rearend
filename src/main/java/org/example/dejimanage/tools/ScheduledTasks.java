@@ -35,7 +35,7 @@ public class ScheduledTasks {
     /***
      * 定时任务：记录当天白班的稼动率和运行时间信息
      */
-    @Scheduled(cron = Constants.CNC_DAILY_OPERATION_白)
+    @Scheduled(cron = Constants.CNC_DAILY_OPERATION_DAY)
     public void insertCncOperationDay(){
         cncClassesService.insertOperationDay();
     }
@@ -43,8 +43,13 @@ public class ScheduledTasks {
     /***
      * 定时任务：记录前一天天夜班的稼动率和运行时间信息
      */
-    @Scheduled(cron = Constants.CNC_DAILY_OPERATION_夜)
+    @Scheduled(cron = Constants.CNC_DAILY_OPERATION_NIGHT)
     public void insertCncOperationNight(){
         cncClassesService.insertOperationNight();
+    }
+
+    @Scheduled(cron = Constants.CNC_DAILY_OPERATION_EXCEL)
+    public void exportExcel(){
+        cncClassesService.exportExcelOfRate();
     }
 }

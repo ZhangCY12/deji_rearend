@@ -28,6 +28,9 @@ public interface CncStatusTimeMapper extends BaseMapper<CncStatusTime> {
     CncStatusTime selectCncRuntimeByid(int id);
 
 
+    /***
+     *  查询当前稼动率、运行时间表所有信息
+     */
     @Select("SELECT cnc_num,run_time,idle_time,error_time,utilization_rate " +
             "FROM t_cnc_status_time")
     List<Map<String,Object>> selectAllCnc();

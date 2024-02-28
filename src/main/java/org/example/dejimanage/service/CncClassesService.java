@@ -6,4 +6,5 @@ import org.example.dejimanage.entity.CncClasses;
 public interface CncClassesService extends IService<CncClasses> {
     void insertOperationDay();
     void insertOperationNight();
+    void exportExcelOfRate();
 }

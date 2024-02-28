@@ -9,6 +9,10 @@ import java.util.Map;
 
 @Mapper
 public interface MaintenanceInfoMapper extends BaseMapper<MaintenanceInfo> {
+
+    /***
+     * 根据ID查询其维修保养信息
+     */
     @Select("SELECT machine_id,last_time,next_time,last_repairtime " +
             "FROM t_cnc_maintenance " +
             "WHERE machine_id = #{id}")
