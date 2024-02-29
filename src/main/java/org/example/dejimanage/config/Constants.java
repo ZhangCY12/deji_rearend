@@ -10,5 +10,5 @@ public class Constants {
     public static final String CNC_DAILY_OPERATION_TIME = "0 58 23 * * ?";//每日稼动率和运行时间存储时间
     public static final String CNC_DAILY_OPERATION_DAY = "0 58 19 * * ?";//白班稼动率统计时间
     public static final String CNC_DAILY_OPERATION_NIGHT = "0 58 7 * * ?";//夜班稼动率统计时间
-    public static final String CNC_DAILY_OPERATION_EXCEL = "0 42 9 * * ?";//白夜班稼动率统计时间导出
+    public static final String CNC_DAILY_OPERATION_EXCEL = "0 44 13 * * ?";//白夜班稼动率统计时间导出
 }

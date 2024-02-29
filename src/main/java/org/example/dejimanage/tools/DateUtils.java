@@ -1,6 +1,8 @@
 package org.example.dejimanage.tools;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,6 +29,20 @@ public class DateUtils {
      */
     public static String formatDateOnly(Date date) {
         return date != null ? DATE_ONLY_FORMAT.format(date) : null;
+    }
+
+    /***
+     * 返回前n天的日期（字符串类型）
+     * @param date 指定某一天
+     * @param n 前几天
+     * @return 整理后：yyyy-MM-dd 时间的格式
+     */
+    public static String formatDateOnly(LocalDate date,int n) {
+        // 计算前n天的日期
+        LocalDate beforeday = date.minusDays(n);
+        // 格式化为指定的格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return beforeday.format(formatter);
     }
 
     /***

@@ -25,6 +25,9 @@ public class CncAlarmAllServiceImpl extends ServiceImpl<CncAlarmAllMapper, CncAl
     private static final Logger logger = LoggerFactory.getLogger(CncAlarmAllServiceImpl.class);
 
 
+    /***
+     * 插入数据表中当天所有机台的报警次数
+     */
     @Override
     public void recordDailyMachineAlarms() {
         // 获取所有机台的ID

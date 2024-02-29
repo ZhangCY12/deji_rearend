@@ -15,8 +15,10 @@ public interface CncClassesMapper extends BaseMapper<CncClasses> {
     /***
      *  插入历史稼动率运行时间表一条数据
      */
-    @Select("INSERT INTO t_cnc_classes_operation (machine_id, date, classes, operation_rate, run_time, standby_time, error_time) " +
-            "VALUES (#{machineId},#{date},#{classes},#{operationRate},#{runTime},#{standbyTime},#{errorTime}) ")
+    @Select("INSERT INTO " +
+            "   t_cnc_classes_operation (machine_id, date, classes, operation_rate, run_time, standby_time, error_time) " +
+            "VALUES " +
+            "   (#{machineId},#{date},#{classes},#{operationRate},#{runTime},#{standbyTime},#{errorTime}) ")
     void insertCncClassesOne(CncClasses cncClasses);
 
     /***
@@ -28,4 +30,17 @@ public interface CncClassesMapper extends BaseMapper<CncClasses> {
             "ORDER BY date DESC " +
             "LIMIT 20")
     List<Map<String,Object>> selectCncClassesByid(@Param("id") int id);
+
+    /***
+     *  根据日期查询
+     */
+    @Select("SELECT DATE_FORMAT(date, '%Y-%m-%d') AS 时间," +
+            "machine_id AS 机器号," +
+            "MAX(CASE WHEN classes = '白班' THEN operation_rate END) AS 白班稼动率," +
+            "MAX(CASE WHEN classes = '夜班' THEN operation_rate END) AS 夜班稼动率," +
+            "CONCAT(FORMAT((MAX(CASE WHEN classes = '白班' THEN CAST(REPLACE(operation_rate, '%', '') AS DECIMAL(10,2)) END) +MAX(CASE WHEN classes = '夜班' THEN CAST(REPLACE(operation_rate, '%', '') AS DECIMAL(10,2)) END)) / 2, 2), '%') AS 总稼动率 " +
+            "FROM t_cnc_classes_operation " +
+            "WHERE date = #{date} AND classes IN ('白班', '夜班') " +
+            "GROUP BY date,machine_id")
+    List<Map<String,Object>> selectRateToday(@Param("date") String date);
 }

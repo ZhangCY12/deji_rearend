@@ -69,7 +69,7 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
     }
 
     /***
-     * 查询机台的总类及其数量
+     * 查询机台的种类及其数量
      */
     @Override
     public List<Map<String, Object>> getDeviceAndCount() {
@@ -93,7 +93,7 @@ public class CNCsServiceImpl extends ServiceImpl<CNCsMapper, CNCs> implements CN
     }
 
     /***
-     * 根据id查询所有信息
+     * 根据id查询所有CNC信息
      * @param id 机器号
      * @return 所有信息
      */

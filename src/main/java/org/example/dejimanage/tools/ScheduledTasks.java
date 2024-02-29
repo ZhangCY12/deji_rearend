@@ -48,6 +48,9 @@ public class ScheduledTasks {
         cncClassesService.insertOperationNight();
     }
 
+    /***
+     * 定时任务：导出当天白夜班稼动率到excel文件
+     */
     @Scheduled(cron = Constants.CNC_DAILY_OPERATION_EXCEL)
     public void exportExcel(){
         cncClassesService.exportExcelOfRate();

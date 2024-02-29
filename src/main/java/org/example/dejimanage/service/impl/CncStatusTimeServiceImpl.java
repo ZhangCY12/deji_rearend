@@ -39,7 +39,7 @@ public class CncStatusTimeServiceImpl extends ServiceImpl<CncStatusTimeMapper, C
     }
 
     /***
-     * 根据id查询单台机的实时稼动率
+     * 根据ID查询单机稼动率
      * @param id 机器号
      */
     @Override

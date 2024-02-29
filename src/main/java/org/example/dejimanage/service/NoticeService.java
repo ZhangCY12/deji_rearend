@@ -6,5 +6,5 @@ import org.example.dejimanage.entity.Notice;
 import java.util.Map;
 
 public interface NoticeService extends IService<Notice> {
-    public Map<String,String> GetNotice();
+    public Map<String,String> GetNotice(); //查询最新的一条公告
 }

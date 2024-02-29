@@ -6,5 +6,5 @@ import org.example.dejimanage.entity.User;
 import java.util.Map;
 
 public interface UserService extends IService<User> {
-    Map<String,Integer> SelectNumberOfPerson();
+    Map<String,Integer> SelectNumberOfPerson(); //查询各个部门及其人数
 }

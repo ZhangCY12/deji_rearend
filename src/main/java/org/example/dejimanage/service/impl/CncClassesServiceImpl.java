@@ -1,15 +1,13 @@
 package org.example.dejimanage.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.example.dejimanage.entity.CncClasses;
 import org.example.dejimanage.mapper.CncClassesMapper;
 import org.example.dejimanage.mapper.CncStatusTimeMapper;
 import org.example.dejimanage.service.CncClassesService;
+import org.example.dejimanage.tools.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CncClassesServiceImpl extends ServiceImpl<CncClassesMapper, CncClasses> implements CncClassesService {
@@ -50,7 +49,7 @@ public class CncClassesServiceImpl extends ServiceImpl<CncClassesMapper, CncClas
             cncClasses.setErrorTime((String) entry.get("error_time"));
             cncClassesMapper.insertCncClassesOne(cncClasses);
         }
-        logger.info("插入白班稼动率、时间数据");
+        logger.info("定时任务_插入白班稼动率、时间数据");
     }
 
     /***
@@ -78,19 +77,36 @@ public class CncClassesServiceImpl extends ServiceImpl<CncClassesMapper, CncClas
             cncClasses.setErrorTime((String) entry.get("error_time"));
             cncClassesMapper.insertCncClassesOne(cncClasses);
         }
-        logger.info("插入夜班稼动率、时间数据");
+        logger.info("定时任务_插入夜班稼动率、时间数据");
     }
 
     /***
-     * 导出每天早晚班稼动率excel表到目标目录
+     * 导出当天早晚班稼动率excel表到目标目录
      */
     @Override
     public void exportExcelOfRate() {
-        List<Map<String, Object>> dataList = getDataList(); // 自定义方法，获取数据列表
-        exportToExcel(dataList, "D:/output.xlsx"); // 输出到 D 盘的 output.xlsx 文件
-        logger.info("导出夜班稼动率、时间数据EXCEL表 D:/output.xlsx");
+        List<Map<String, Object>> result = cncClassesMapper.selectRateToday(DateUtils.formatDateOnly(LocalDate.now(),1)); // 自定义方法，获取数据列表
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        for (int i = 0; i < result.size(); i++) {
+            Map<String,Object> map = new HashMap<>();
+            Map<String, Object> entry = result.get(i);
+            map.put("日期",entry.get("时间"));
+            map.put("机器号",entry.get("机器号"));
+            map.put("总稼动率",entry.get("总稼动率"));
+            map.put("白班稼动率",entry.get("白班稼动率"));
+            map.put("夜班稼动率",entry.get("夜班稼动率"));
+            dataList.add(map);
+        }
+
+        exportToExcel(dataList, "D:/" + DateUtils.formatDateOnly(LocalDate.now(),1) + "稼动率.xlsx"); // 导出到 D 盘
+        logger.info("定时任务_导出夜班稼动率、时间数据EXCEL表");
     }
 
+    /***
+     * 将数据（List<Map<String,Object>>类型）以Excel文件导出到指定目录
+     * @param dataList 目标list
+     * @param filePath 文件目标目录
+     */
     public static void exportToExcel(List<Map<String, Object>> dataList, String filePath) {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Sheet1");
@@ -119,37 +135,30 @@ public class CncClassesServiceImpl extends ServiceImpl<CncClassesMapper, CncClas
                         cell.setCellValue((Boolean) value);
                     }
                     // 如果有其他数据类型，可以继续扩展
+
+                    // 设置其他非百分比格式的单元格文本居中
+                    CellStyle style = workbook.createCellStyle();
+                    style.setAlignment(HorizontalAlignment.CENTER);
+                    cell.setCellStyle(style);
+
                 }
             }
+            // 自动调整列宽
+            for (int i = 0; i < dataList.get(0).size(); i++) {
+                sheet.autoSizeColumn(i);
+            }
+
             // 写入到文件
             try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
                 workbook.write(fileOut);
-                System.out.println("Excel导出成功：" + filePath);
+                logger.info("Excel导出成功：" + filePath);
             } catch (IOException e) {
-                System.out.println("写入Excel文件时发生错误：" + e.getMessage());
+                logger.error("写入Excel文件时发生错误：" + e.getMessage());
             }
 
         } catch (IOException e) {
-            System.out.println("创建Excel文件时发生错误：" + e.getMessage());
+            logger.error("创建Excel文件时发生错误：" + e.getMessage());
         }
     }
 
-    private static List<Map<String, Object>> getDataList() {
-        // 这里是一个示例数据，实际使用时根据你的数据结构和来源进行替换
-        List<Map<String, Object>> dataList = new ArrayList<>();
-
-        Map<String, Object> data1 = new LinkedHashMap<>();
-        data1.put("Name", "Alice");
-        data1.put("Age", 28);
-        data1.put("City", "New York");
-        dataList.add(data1);
-
-        Map<String, Object> data2 = new LinkedHashMap<>();
-        data2.put("Name", "Bob");
-        data2.put("Age", 35);
-        data2.put("City", "Los Angeles");
-        dataList.add(data2);
-
-        return dataList;
-    }
 }

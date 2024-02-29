@@ -22,7 +22,7 @@ public class CncAlarmServiceImpl extends ServiceImpl<CncAlarmMapper, CncAlarm> i
     private static final Logger logger = LoggerFactory.getLogger(CncAlarmServiceImpl.class);
 
     /***
-     * 根据id查询当天的报警
+     * 根据id查询当天的报警信息
      * @param id 机器号
      * @return 对象列表
      */
